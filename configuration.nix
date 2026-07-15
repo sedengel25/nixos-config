@@ -21,6 +21,9 @@
     enable = true;
     xkb.layout = "de";
     displayManager.lightdm.enable = true;
+    displayManager.setupCommands = ''
+      ${pkgs.xorg.setxkbmap}/bin/setxkbmap de
+    '';
     windowManager.i3 = {
       enable = true;
       extraPackages = with pkgs; [
