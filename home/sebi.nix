@@ -60,6 +60,8 @@
     evolution     # Mail
     nautilus      # Dateimanager
     dbeaver-bin   # Datenbank-GUI
+    positron-bin  # Data-Science IDE (Attribut heißt positron-bin)
+    claude-code   # Anthropic CLI Coding-Agent (unfree)
 
     # TOTP-Generator: `2fa <service>` liest den Base32-Seed aus
     # ~/.2fa_secrets (Zeilen "service=SEED"), erzeugt den 6-stelligen Code,

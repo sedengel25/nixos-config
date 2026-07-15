@@ -5,6 +5,10 @@
   # --- Enable flakes + the new nix CLI ---
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
+  # --- Unfreie Pakete erlauben (claude-code, positron, NVIDIA-Treiber …) ---
+  # Gilt via home-manager.useGlobalPkgs auch für home.packages.
+  nixpkgs.config.allowUnfree = true;
+
   # --- Netzwerk ---
   networking.networkmanager.enable = true;
 
@@ -21,5 +25,10 @@
     git
     vim
     wget
+
+    # Archive: packen/entpacken
+    zip
+    unzip
+    p7zip   # 7z / 7za
   ];
 }
