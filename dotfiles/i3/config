@@ -57,6 +57,7 @@ bindsym $mod+Return exec alacritty
 # kill focused window
 bindsym $mod+KP_0 kill
 bindsym $mod+KP_Insert kill
+bindsym $mod+minus kill
 # Full screen screenshot bindsym Print exec --no-startup-id flameshot full -p ~/Pictures
 
 # Screenshot and copy to clipboard
