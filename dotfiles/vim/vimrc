@@ -1,0 +1,16 @@
+" --- general ---------------------------------------
+syntax on                  " Syntax Highlighting aktivieren
+filetype plugin indent on  " Dateityp-Erkennung + passende Indents
+set number                 " Immer Zeilennummern anzeigen
+
+" --- only for .py-files -------------------------------------------
+augroup python_settings
+  autocmd!
+  " Wird nur ausgeführt, wenn eine Python-Datei geöffnet wird
+  autocmd FileType python setlocal tabstop=4
+  autocmd FileType python setlocal shiftwidth=4
+  autocmd FileType python setlocal expandtab
+  autocmd FileType python setlocal autoindent
+  autocmd FileType python setlocal smartindent
+  "autocmd FileType python setlocal colorcolumn=79
+augroup END
