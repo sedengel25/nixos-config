@@ -54,6 +54,9 @@ tiling_drag modifier titlebar
 # start a terminal
 bindsym $mod+Return exec alacritty
 
+# TUD 2FA-Code erzeugen und in die Zwischenablage kopieren
+bindsym $mod+t exec --no-startup-id 2fa tud
+
 # kill focused window
 bindsym $mod+KP_0 kill
 bindsym $mod+KP_Insert kill

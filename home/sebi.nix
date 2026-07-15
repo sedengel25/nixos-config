@@ -60,6 +60,30 @@
     evolution     # Mail
     nautilus      # Dateimanager
     dbeaver-bin   # Datenbank-GUI
+
+    # TOTP-Generator: `2fa <service>` liest den Base32-Seed aus
+    # ~/.2fa_secrets (Zeilen "service=SEED"), erzeugt den 6-stelligen Code,
+    # kopiert ihn in die Zwischenablage und gibt ihn aus. Der Seed selbst
+    # ist ein Secret und liegt NICHT im Repo.
+    (writeShellApplication {
+      name = "2fa";
+      runtimeInputs = [ oath-toolkit gawk xclip ];
+      text = ''
+        SERVICE="''${1:-}"
+        if [ -z "$SERVICE" ]; then
+          echo "Usage: 2fa <service>"
+          exit 2
+        fi
+        SECRET="$(awk -F= -v s="$SERVICE" '$1==s {print $2; exit}' "$HOME/.2fa_secrets" 2>/dev/null || true)"
+        if [ -z "$SECRET" ]; then
+          echo "Service nicht gefunden: $SERVICE"
+          exit 1
+        fi
+        CODE="$(oathtool --totp -b "$SECRET")"
+        printf '%s' "$CODE" | xclip -selection clipboard
+        echo "$CODE (in Zwischenablage kopiert)"
+      '';
+    })
   ];
 
   # --- Dotfiles ---
