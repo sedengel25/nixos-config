@@ -21,6 +21,14 @@
     };
   };
 
+  # --- Secret-Service Keyring (gnome-keyring) ---
+  # eduVPN & Co. speichern Tokens/Passwörter über die Secret-Service-API.
+  # Unter i3 läuft standardmäßig kein Keyring-Daemon. Genau wie auf Arch
+  # (pam_gnome_keyring in /etc/pam.d/lightdm) startet & entsperrt PAM den
+  # Daemon beim LightDM-Login mit dem Login-Passwort.
+  services.gnome.gnome-keyring.enable = true;
+  security.pam.services.lightdm.enableGnomeKeyring = true;
+
   # --- System-Pakete, die die i3-Config aufruft ---
   environment.systemPackages = with pkgs; [
     dex                   # XDG-Autostart
