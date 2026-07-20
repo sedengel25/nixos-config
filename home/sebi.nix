@@ -1,6 +1,21 @@
 # home-manager: sebi's user-level apps and dotfiles.
 { pkgs, ... }:
 
+let
+  # Gemeinsame R-Paketliste. Wird von RStudio (IDE) UND der Terminal-R
+  # geteilt, damit beide exakt denselben Satz Pakete sehen. Neue Pakete
+  # NUR hier eintragen (kein install.packages() zur Laufzeit), dann rebuild –
+  # so haben alle Maschinen dieselbe Umgebung. Paketnamen: Punkt -> Unterstrich
+  # (data.table -> data_table).
+  rEnvPackages = with pkgs.rPackages; [
+    languageserver   # R Language Server (Autocomplete/Diagnostics)
+    tidyverse
+    here
+    sf
+    data_table
+    plotly           # Interaktive Plots (zieht htmlwidgets als Dependency)
+  ];
+in
 {
   home.username = "sebi";
   home.homeDirectory = "/home/sebi";
@@ -57,11 +72,38 @@
   home.packages = with pkgs; [
     alacritty     # Terminal
     rofi          # Launcher
-    evolution     # Mail
+    evolutionWithPlugins  # Mail + EWS-Backend (TU Dresden). Getrennte
+                          # evolution/evolution-ews-Pakete verdrahten die
+                          # Modul-Discovery in e-d-s nicht -> EWS fehlt im
+                          # Server-Typ-Dropdown. Der Wrapper bündelt beides.
     nautilus      # Dateimanager
     dbeaver-bin   # Datenbank-GUI
-    positron-bin  # Data-Science IDE (Attribut heißt positron-bin)
     claude-code   # Anthropic CLI Coding-Agent (unfree)
+
+    # --- RStudio mit R-Paketen (Data-Science IDE) ---
+    # rstudioWrapper bündelt R + die Pakete aus rEnvPackages fest ein; die
+    # IDE findet R ohne Discovery-Umwege (anders als Positron auf NixOS).
+    (rstudioWrapper.override { packages = rEnvPackages; })
+
+    # --- R fürs Terminal (`R` / `Rscript` auf dem PATH) ---
+    # Gleiche Paketliste wie RStudio, damit CLR-Skripte dieselbe Umgebung haben.
+    (rWrapper.override { packages = rEnvPackages; })
+
+    # --- Python mit Paketen (globales User-Toolchain) ---
+    # python3.withPackages gibt `python3`/`python` auf dem PATH mit genau
+    # diesen Bibliotheken. Neue Bibliotheken hier eintragen, dann rebuild.
+    (python3.withPackages (ps: with ps; [
+      numpy
+      pandas
+      matplotlib
+      scikit-learn
+    ]))
+
+    kdePackages.okular  # PDF-Viewer (KDE)
+    libreoffice         # Office-Suite
+    zotero              # Literaturverwaltung
+    zoom-us             # Videokonferenzen (unfree, Attribut heißt zoom-us)
+    kdePackages.kate    # Texteditor (KDE)
 
     # TOTP-Generator: `2fa <service>` liest den Base32-Seed aus
     # ~/.2fa_secrets (Zeilen "service=SEED"), erzeugt den 6-stelligen Code,
@@ -93,6 +135,12 @@
   # ~/.config/i3/config. Später kann sie voll deklarativ werden (xsession.windowManager.i3).
   xdg.configFile."i3/config".source = ../dotfiles/i3/config;
   xdg.configFile."alacritty/alacritty.toml".source = ../dotfiles/alacritty/alacritty.toml;
+
+  # RStudio-Preferences deklarativ. editor_keybindings = "vim" schaltet den
+  # Vim-Modus im Code-Editor ein (Enum: default|vim|emacs|sublime). Die Datei
+  # ist ab jetzt ein Read-only-Symlink in den Store; Pref-Aenderungen also hier
+  # im Repo machen + rebuild, nicht mehr ueber die RStudio-GUI persistierbar.
+  xdg.configFile."rstudio/rstudio-prefs.json".source = ../dotfiles/rstudio/rstudio-prefs.json;
 
   # --- Nicht ändern nach Erstinstallation ---
   home.stateVersion = "26.05";

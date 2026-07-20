@@ -35,6 +35,9 @@
     xss-lock              # Screen-Lock vor Suspend
     networkmanagerapplet  # nm-applet
     flameshot             # Screenshots
+    xclip                 # X11-Clipboard-CLI: liest/schreibt die Zwischenablage
+                          # (u.a. damit claude-code Bilder aus dem Clipboard
+                          # per Strg+V einfügen kann)
     psmisc                # killall
     feh                   # Wallpaper (in Config referenziert)
   ];
