@@ -149,7 +149,6 @@ exec --no-startup-id i3-msg "workspace $ws2; exec alacritty"
 exec --no-startup-id i3-msg "workspace $ws3; exec evolution"
 exec --no-startup-id i3-msg "workspace $ws4; exec rstudio"
 exec --no-startup-id i3-msg "workspace $ws5; exec nautilus"
-exec --no-startup-id i3-msg "workspace $ws6; exec dbeaver"
 # switch to workspace
 bindsym $mod+1 workspace $ws1
 bindsym $mod+2 workspace $ws2

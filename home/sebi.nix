@@ -140,7 +140,13 @@ in
   # Vim-Modus im Code-Editor ein (Enum: default|vim|emacs|sublime). Die Datei
   # ist ab jetzt ein Read-only-Symlink in den Store; Pref-Aenderungen also hier
   # im Repo machen + rebuild, nicht mehr ueber die RStudio-GUI persistierbar.
-  xdg.configFile."rstudio/rstudio-prefs.json".source = ../dotfiles/rstudio/rstudio-prefs.json;
+  # force = true, weil RStudio die Datei zur Laufzeit ueberschreibt. Ohne force
+  # bricht die HM-Aktivierung ab ("Existing file ... would be clobbered"). Mit
+  # force gewinnt bei jedem Rebuild die Repo-Version.
+  xdg.configFile."rstudio/rstudio-prefs.json" = {
+    source = ../dotfiles/rstudio/rstudio-prefs.json;
+    force = true;
+  };
 
   # --- Nicht ändern nach Erstinstallation ---
   home.stateVersion = "26.05";
