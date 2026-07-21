@@ -61,6 +61,9 @@ in
   # --- SSH client (TU Dresden HPC Login-Nodes) ---
   programs.ssh = {
     enable = true;
+    # Lädt den privaten Schlüssel beim ersten Gebrauch in den Agent, damit
+    # er via forwardAgent auf die HPC-Nodes weitergereicht wird.
+    addKeysToAgent = "yes";
     matchBlocks."?.alpha ?.barnard ?.romeo ?.capella" = {
       hostname = "login%h.hpc.tu-dresden.de";
       user = "sede829c";
