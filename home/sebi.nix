@@ -80,6 +80,7 @@ in
                           # Modul-Discovery in e-d-s nicht -> EWS fehlt im
                           # Server-Typ-Dropdown. Der Wrapper bündelt beides.
     nautilus      # Dateimanager
+    seahorse      # GNOME-Schlüsselbund-GUI (Passwörter/SSH/GPG verwalten)
     dbeaver-bin   # Datenbank-GUI
     claude-code   # Anthropic CLI Coding-Agent (unfree)
 
@@ -102,7 +103,10 @@ in
       scikit-learn
     ]))
 
+    uv            # Python-Paketmanager für projektlokale venvs (z.B. aequilibrae)
+
     kdePackages.okular  # PDF-Viewer (KDE)
+    pandoc              # Dokumentkonverter (Markdown/HTML/PDF/DOCX ...)
     libreoffice         # Office-Suite
     zotero              # Literaturverwaltung
     zoom-us             # Videokonferenzen (unfree, Attribut heißt zoom-us)
