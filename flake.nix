@@ -35,7 +35,7 @@
       nixosConfigurations = {
         x1 = mkHost "x1";
         # Add more machines here, e.g.:
-        # desktop = mkHost "desktop";
+        desktop = mkHost "desktop";
       };
     };
 }
