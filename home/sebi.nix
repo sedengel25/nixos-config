@@ -14,6 +14,18 @@ let
     sf
     data_table
     plotly           # Interaktive Plots (zieht htmlwidgets als Dependency)
+    patchwork        # ggplot2-Plots nebeneinander/kombinieren
+    shiny            # Web-App-Framework für R
+    DT
+    dbscan
+    leaflet
+    renv
+    reticulate
+    # In aktuellem nixpkgs als "broken" markiert; Markierung ist oft veraltet
+    # und das Paket baut trotzdem. markUnbroken hebt nur diese eine Markierung auf.
+    (leaflet_extras.overrideAttrs (o: { meta = o.meta // { broken = false; }; }))
+    future
+    future_apply
   ];
 in
 {
@@ -104,6 +116,9 @@ in
     ]))
 
     uv            # Python-Paketmanager für projektlokale venvs (z.B. aequilibrae)
+
+    sshfs         # Remote-Verzeichnisse per SSH mounten (z.B. HPC-Nodes),
+                  # nutzt FUSE (fusermount-Wrapper ist auf NixOS by default da)
 
     kdePackages.okular  # PDF-Viewer (KDE)
     pandoc              # Dokumentkonverter (Markdown/HTML/PDF/DOCX ...)
