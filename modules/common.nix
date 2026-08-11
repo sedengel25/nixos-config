@@ -44,5 +44,7 @@
 
     # Hardware-Infos: liefert `lspci` (PCI-Geraete auflisten)
     pciutils
+    usbutils
+    lshw
   ];
 }
