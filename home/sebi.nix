@@ -170,6 +170,15 @@ in
     force = true;
   };
 
+  # --- GNOME-/GTK-Einstellungen via dconf ---
+  # Nautilus soll standardmäßig die Listenansicht statt Symbolansicht nutzen.
+  # Werte: "icon-view" | "list-view". Wirkt für neue Fenster nach dem Rebuild.
+  dconf.settings = {
+    "org/gnome/nautilus/preferences" = {
+      default-folder-viewer = "list-view";
+    };
+  };
+
   # --- Nicht ändern nach Erstinstallation ---
   home.stateVersion = "26.05";
 }

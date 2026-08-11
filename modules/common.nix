@@ -20,6 +20,12 @@
   # --- SSH (praktisch fürs Rüberschieben von Configs) ---
   services.openssh.enable = true;
 
+  # --- dconf ---
+  # Ohne dies nutzt GSettings auf i3 (kein GNOME) nicht das dconf-Backend,
+  # sodass home-manager's `dconf.settings` (z.B. Nautilus-Listenansicht) nicht
+  # von Apps gelesen werden. Aktiviert den dconf-GSettings-Backend systemweit.
+  programs.dconf.enable = true;
+
   # --- Basiswerkzeuge auf jedem Host ---
   environment.systemPackages = with pkgs; [
     git
@@ -35,5 +41,8 @@
     zip
     unzip
     p7zip   # 7z / 7za
+
+    # Hardware-Infos: liefert `lspci` (PCI-Geraete auflisten)
+    pciutils
   ];
 }

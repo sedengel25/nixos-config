@@ -12,6 +12,10 @@
     ../../modules/bluetooth.nix
     ../../modules/eduvpn.nix
 
+    # Nur dieser Host hat eine NVIDIA-GPU zum Zocken.
+    ../../modules/nvidia.nix
+    ../../modules/gaming.nix
+
     # System-level user account.
     ../../users/sebi.nix
   ];
