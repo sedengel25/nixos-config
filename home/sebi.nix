@@ -126,6 +126,7 @@ in
     zotero              # Literaturverwaltung
     zoom-us             # Videokonferenzen (unfree, Attribut heißt zoom-us)
     kdePackages.kate    # Texteditor (KDE)
+    xournalpp           # Hand-signature
 
     # TOTP-Generator: `2fa <service>` liest den Base32-Seed aus
     # ~/.2fa_secrets (Zeilen "service=SEED"), erzeugt den 6-stelligen Code,
