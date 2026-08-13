@@ -46,5 +46,8 @@
     pciutils
     usbutils
     lshw
+    # VM
+    qemu
+    gdb
   ];
 }
