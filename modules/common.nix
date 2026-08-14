@@ -51,5 +51,7 @@
     gdb
     # Mount
     cifs-utils
+    # Geo
+    gdal
   ];
 }
