@@ -49,5 +49,7 @@
     # VM
     qemu
     gdb
+    # Mount
+    cfis-utils
   ];
 }
