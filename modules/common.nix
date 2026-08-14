@@ -50,6 +50,6 @@
     qemu
     gdb
     # Mount
-    cfis-utils
+    cifs-utils
   ];
 }
