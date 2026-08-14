@@ -53,5 +53,6 @@
     cifs-utils
     # Geo
     gdal
+    gpsbabel
   ];
 }
