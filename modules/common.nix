@@ -32,6 +32,7 @@
     vim
     wget
     file
+    lsof
     # Schnelle Such-Tools. Achtung: das Binary von `fd` heisst `fd`
     # (nicht `fdfind` wie auf Debian/Ubuntu); ripgrep liefert `rg`.
     fd        # schneller find-Ersatz
