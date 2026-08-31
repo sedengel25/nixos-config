@@ -15,7 +15,12 @@
       system = "x86_64-linux";
 
       # Helper: build a host from ./hosts/<name>, wired up with home-manager.
-      mkHost = host: nixpkgs.lib.nixosSystem {
+      #
+      # `home` waehlt das home-manager-Profil. Voreinstellung ist das
+      # Desktop-Profil mit GUI-Apps; headless Hosts uebergeben stattdessen
+      # ./home/server.nix. (Welche SYSTEM-Module ein Host bekommt, steht
+      # dagegen in hosts/<name>/default.nix.)
+      mkHost = { host, home ? ./home/sebi.nix }: nixpkgs.lib.nixosSystem {
         inherit system;
         specialArgs = { inherit inputs; };
         modules = [
@@ -26,16 +31,16 @@
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
             home-manager.extraSpecialArgs = { inherit inputs; };
-            home-manager.users.sebi = import ./home/sebi.nix;
+            home-manager.users.sebi = import home;
           }
         ];
       };
     in
     {
       nixosConfigurations = {
-        x1 = mkHost "x1";
-        # Add more machines here, e.g.:
-        desktop = mkHost "desktop";
+        x1      = mkHost { host = "x1"; };
+        desktop = mkHost { host = "desktop"; };
+        server  = mkHost { host = "server"; home = ./home/server.nix; };
       };
     };
 }
