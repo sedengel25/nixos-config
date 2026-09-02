@@ -21,29 +21,28 @@
     };
   };
 
-  # --- Secret-Service Keyring (gnome-keyring) ---
-  # eduVPN & Co. speichern Tokens/Passwörter über die Secret-Service-API.
-  # Unter i3 läuft standardmäßig kein Keyring-Daemon. Genau wie auf Arch
-  # (pam_gnome_keyring in /etc/pam.d/lightdm) startet & entsperrt PAM den
-  # Daemon beim LightDM-Login mit dem Login-Passwort.
+  # --- Secret-Service Keyring ---
+  #   - installs and enables the gnome-keyring daemon
+  #   - daemon securely stores secrets: Wi-Fi passwords, SSH key passphrases, GPG keys, app tokens (browsers, email clients, etc.)
+  #   - implements the Secret Service D-Bus API, so apps like Chromium, Firefox, Evolution, or NetworkManager can store/retrieve credentials through it instead of managing their own encrypted storage
   services.gnome.gnome-keyring.enable = true;
+  #    - hooks gnome-keyring into the PAM stack specifically for the lightdm login service: writes 'pam_gnome_keyring.so' into auth and session management of /etc/pam.d/login (which is called by /etc/pam.d/lightdm)
+  #    - on login, PAM unlocks your gnome-keyring using the same password you typed to log in, so you don't get a second separate "unlock keyring" prompt after login
   security.pam.services.lightdm.enableGnomeKeyring = true;
 
-  # --- System-Pakete, die die i3-Config aufruft ---
+  # --- Packages needed by i3 ---
   environment.systemPackages = with pkgs; [
-    dex                   # XDG-Autostart
-    xss-lock              # Screen-Lock vor Suspend
-    networkmanagerapplet  # nm-applet
-    flameshot             # Screenshots
-    xclip                 # X11-Clipboard-CLI: liest/schreibt die Zwischenablage
-                          # (u.a. damit claude-code Bilder aus dem Clipboard
-                          # per Strg+V einfügen kann)
-    psmisc                # killall
-    feh                   # Wallpaper (in Config referenziert)
+    dex                   # runs XDG .desktop autostart entries on login
+    xss-lock              # locks the screen automatically before suspend
+    networkmanagerapplet  # tray applet for NetworkManager (nm-applet), Wi-Fi/VPN UI
+    flameshot             # screenshot tool with annotation features
+    xclip                 # CLI to read/write the X11 clipboard
+    psmisc                # process utilities, provides `killall`, `fuser`, `pstree`
+    feh                   # lightweight image viewer, used here to set the wallpaper
   ];
 
-  # --- Schriften ---
+  # --- Fonts ---
   fonts.packages = with pkgs; [
-    hack-font  # von der Alacritty-Config verwendet
+    hack-font  # specified in ~/.config/alacritty/alacritty.toml 
   ];
 }

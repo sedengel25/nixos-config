@@ -1,59 +1,82 @@
-# Baseline every host imports: nix settings, network, locale, ssh, base CLI.
+# Baseline every host imports
 { pkgs, ... }:
 
 {
-  # --- Enable flakes + the new nix CLI ---
+  # Enable flakes + the new nix CLI (nix build, nix run, nix develop...)
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
-  # --- Unfreie Pakete erlauben (claude-code, positron, NVIDIA-Treiber …) ---
-  # Gilt via home-manager.useGlobalPkgs auch für home.packages.
+  # Allow 'unfree' software (claude-code, positron, NVIDIA-Treiber …)
+  # Unfree: licensed in a way that restricts use, redistribution or modification
   nixpkgs.config.allowUnfree = true;
 
-  # --- Netzwerk ---
+  # --- Networking ---
+  # Enables NetworkManager, which:
+  #   - installs the program and starts it automatically at boot (systemctl status NetworkManager)
+  #   - writes its configuration files (/etc/NetworkManager/NetworkManager.conf)
+  #   - creates a user group that is allowed to change network settings (group "networkmanager" in /etc/group)
+  #   - installs the helper programs it needs for WiFi
+  #   - switches off other programs that would compete for the same interfaces
+  # The tray icon and the commands nmcli and nmtui talk to this program.
+  # Saved WiFi networks and passwords live in /etc/NetworkManager/system-connections/ (root only).
   networking.networkmanager.enable = true;
 
-  # --- Zeitzone & Locale ---
+  # --- TimeZone + Keyboard ---
   time.timeZone = "Europe/Berlin";
   i18n.defaultLocale = "de_DE.UTF-8";
   console.keyMap = "de";
 
-  # --- SSH (praktisch fürs Rüberschieben von Configs) ---
+  # --- SSH daemon ---
+  #   - adds openssh to the system
+  #   - creates a systemd unit that starts sshd daemon at boot
+  #   - generates host keys on first activation
+  #   - opens the firewall port for SSH, but only if you also have networking.firewall.enable = true
   services.openssh.enable = true;
 
   # --- dconf ---
-  # Ohne dies nutzt GSettings auf i3 (kein GNOME) nicht das dconf-Backend,
-  # sodass home-manager's `dconf.settings` (z.B. Nautilus-Listenansicht) nicht
-  # von Apps gelesen werden. Aktiviert den dconf-GSettings-Backend systemweit.
+  #  - installs the dconf package and its daemon
+  #  - set up the D-Bus service that lets applications read and write their settings
+  #  - provides the backend that tools like dconf-editor or gsettings use
   programs.dconf.enable = true;
 
-  # --- Basiswerkzeuge auf jedem Host ---
+  # --- CLI tools ---
   environment.systemPackages = with pkgs; [
+    # Version control / editor
     git
     vim
-    wget
-    file
-    lsof
-    # Schnelle Such-Tools. Achtung: das Binary von `fd` heisst `fd`
-    # (nicht `fdfind` wie auf Debian/Ubuntu); ripgrep liefert `rg`.
-    fd        # schneller find-Ersatz
-    ripgrep   # schneller grep-Ersatz (rg)
 
-    # Archive: packen/entpacken
+    # Development / interactive computing
+    jupyter   # notebook environment (Python/R/etc.)
+    gdb       # debugger for compiled programs (C/C++)
+
+    # Network / download
+    wget
+
+    # File & search utilities
+    file      # detects file type by content
+    lsof      # lists open files and holding processes
+    # Fast search tools. Note: the `fd` binary is called `fd`
+    # (not `fdfind` as on Debian/Ubuntu); ripgrep provides `rg`.
+    fd        # fast find replacement
+    ripgrep   # fast grep replacement (rg)
+
+    # Archives: pack/unpack
     zip
     unzip
-    p7zip   # 7z / 7za
+    p7zip     # 7z / 7za
 
-    # Hardware-Infos: liefert `lspci` (PCI-Geraete auflisten)
-    pciutils
-    usbutils
-    lshw
+    # Hardware info
+    pciutils  # provides `lspci` (list PCI devices)
+    usbutils  # provides `lsusb` (list USB devices)
+    lshw      # detailed hardware listing
+
     # VM
     qemu
-    gdb
+
     # Mount
-    cifs-utils
+    cifs-utils  # mount Windows/SMB network shares
+
     # Geo
-    gdal
-    gpsbabel
+    gdal      # read/write/convert geospatial data (raster/vector)
+    gpsbabel  # convert between GPS data formats
   ];
 }
