@@ -2,14 +2,8 @@
 
 {
   imports = [
-    # Per-machine hardware — generated ON this machine, see the placeholder file.
     ./hardware-configuration.nix
-
-    # Nur die Basis: kein desktop.nix (X11/i3/LightDM), kein audio.nix,
-    # bluetooth.nix oder eduvpn.nix — die Kiste läuft headless.
     ../../modules/common.nix
-
-    # System-level user account.
     ../../users/sebi.nix
   ];
 
@@ -26,13 +20,10 @@
   # Ohne Limit füllt jede Generation die ESP mit Kernel + initrd.
   boot.loader.systemd-boot.configurationLimit = 10;
 
-  # --- SSH: nur Public-Key-Login ---
-  # Der Key steht bewusst HIER und nicht in users/sebi.nix: die Datei
-  # importieren alle drei Hosts, ein Key dort würde also auch x1 und desktop
-  # ändern. Public Keys sind nicht geheim und dürfen ins Repo.
-  # Ohne passenden Key sperrst du dich aus und kommst nur noch per
-  # Monitor+Tastatur an die Konsole.
   users.users.sebi.openssh.authorizedKeys.keys = [
+    # desktop — SHA256:RTInrQvGX42veuMFqkombsDRVP1wfop1XlOz4K+Z22A
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOy7ZJ7rzkexnG2cioJBXQJLQP28tjPhb5GlKA3e932c desktop"
+    # probably x1
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILZLCICmTCCTo02UcQWgynzMbmf3hB9DJNyXaDoH4eVD sbstdngl@yahoo.com"
   ];
 
