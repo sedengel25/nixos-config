@@ -30,6 +30,15 @@
   #    - on login, PAM unlocks your gnome-keyring using the same password you typed to log in, so you don't get a second separate "unlock keyring" prompt after login
   security.pam.services.lightdm.enableGnomeKeyring = true;
 
+  # --- USB/disk management (Nautilus "Other Locations", auto-mount) ---
+  #   - udisks2: D-Bus service that detects, mounts and unmounts storage devices
+  #     (USB sticks, external drives). D-Bus-activated, so it starts on demand
+  #     as soon as a client (e.g. Nautilus) asks for it — no autostart entry needed.
+  #   - gvfs: virtual filesystem layer Nautilus uses to talk to udisks2 (and to
+  #     mount other backends like MTP phones, SMB shares, etc.)
+  services.udisks2.enable = true;
+  services.gvfs.enable = true;
+
   # --- Packages needed by i3 ---
   environment.systemPackages = with pkgs; [
     dex                   # runs XDG .desktop autostart entries on login
