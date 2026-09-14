@@ -11,6 +11,8 @@
     ../../modules/audio.nix
     ../../modules/bluetooth.nix
     # ../../modules/eduvpn.nix   # enable if this laptop needs the uni/work VPN
+    ../../modules/tailscale.nix
+    ../../modules/syncthing.nix
 
     # System-level user account.
     ../../users/sebi.nix
@@ -23,10 +25,14 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  # Die EFI-Partition wird mit Windows geteilt und ist oft nur 100 MB gross.
-  # Jede NixOS-Generation legt dort Kernel + initrd ab (~80-120 MB), deshalb
-  # die Anzahl der Boot-Eintraege begrenzen. Bei einer grossen ESP (>= 512 MB)
-  # kann der Wert erhoeht oder die Zeile geloescht werden.
+  # Die EFI-Partition (260 MB) wird mit Windows geteilt. Gemessen auf dem x1,
+  # das die gleiche Konstellation hat: Windows-Bootloader 32 MB, pro Kernel-Satz
+  # 13 MB (bzImage) + 41 MB (initrd) = 54 MB. Bleiben ~227 MB fuer NixOS, also
+  # Platz fuer rund 4 Kernel-Saetze — deshalb das Limit.
+  #
+  # Achtung: Das Limit zaehlt Boot-EINTRAEGE, der Platzbedarf haengt aber an der
+  # Zahl UNTERSCHIEDLICHER Kernel. Generationen mit gleichem Kernel teilen sich
+  # Kernel und initrd auf der ESP und kosten fast nichts extra.
   boot.loader.systemd-boot.configurationLimit = 3;
 
   # --- WICHTIG: pro Host, nicht ändern nach Erstinstallation ---

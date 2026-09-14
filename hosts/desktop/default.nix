@@ -11,6 +11,8 @@
     ../../modules/audio.nix
     ../../modules/bluetooth.nix
     ../../modules/eduvpn.nix
+    ../../modules/tailscale.nix
+    ../../modules/syncthing.nix
 
     # Nur dieser Host hat eine NVIDIA-GPU zum Zocken.
     ../../modules/nvidia.nix

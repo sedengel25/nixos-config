@@ -4,6 +4,8 @@
   imports = [
     ./hardware-configuration.nix
     ../../modules/common.nix
+    ../../modules/tailscale.nix
+    ../../modules/syncthing.nix
     ../../users/sebi.nix
   ];
 
@@ -49,10 +51,7 @@
   nix.optimise.automatic = true;
   services.journald.extraConfig = "SystemMaxUse=500M";
 
-  # Neue Dienste brauchen hier ihren Port — die Firewall ist per default an
-  # und offen ist nur 22 (das öffnet das openssh-Modul selbst).
-  # networking.firewall.allowedTCPPorts = [ 80 443 ];
+  services.tailscale.useRoutingFeatures = "server";
 
-  # --- WICHTIG: pro Host, nicht ändern nach Erstinstallation ---
   system.stateVersion = "26.05";
 }

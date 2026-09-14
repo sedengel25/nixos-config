@@ -11,6 +11,8 @@
     ../../modules/audio.nix
     ../../modules/bluetooth.nix
     ../../modules/eduvpn.nix
+    ../../modules/tailscale.nix
+    ../../modules/syncthing.nix
 
     # System-level user account.
     ../../users/sebi.nix
