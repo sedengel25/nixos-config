@@ -39,6 +39,7 @@
     {
       nixosConfigurations = {
         x1      = mkHost { host = "x1"; };
+        l14     = mkHost { host = "l14"; };
         desktop = mkHost { host = "desktop"; };
         server  = mkHost { host = "server"; home = ./home/server.nix; };
       };
