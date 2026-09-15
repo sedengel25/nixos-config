@@ -10,7 +10,7 @@
     ../../modules/desktop.nix
     ../../modules/audio.nix
     ../../modules/bluetooth.nix
-    # ../../modules/eduvpn.nix   # enable if this laptop needs the uni/work VPN
+    ../../modules/eduvpn.nix   
     ../../modules/tailscale.nix
     ../../modules/syncthing.nix
 
