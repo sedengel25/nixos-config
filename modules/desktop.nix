@@ -48,7 +48,11 @@
     xclip                 # CLI to read/write the X11 clipboard
     psmisc                # process utilities, provides `killall`, `fuser`, `pstree`
     feh                   # lightweight image viewer, used here to set the wallpaper
+    brightnessctl         # CLI to control screen brightness
   ];
+
+  # udev rule: lets "video" group write brightness without root
+  services.udev.packages = [ pkgs.brightnessctl ];
 
   # --- Fonts ---
   fonts.packages = with pkgs; [

@@ -69,6 +69,7 @@
     usbutils  # provides `lsusb` (list USB devices)
     lshw      # detailed hardware listing
 
+    efibootmgr
     # VM
     qemu
 
