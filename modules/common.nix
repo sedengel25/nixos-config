@@ -69,7 +69,7 @@
     usbutils  # provides `lsusb` (list USB devices)
     lshw      # detailed hardware listing
 
-    efibootmgr
+    rdfind # finds duplicated files
     # VM
     qemu
 
