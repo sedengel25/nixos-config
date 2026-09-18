@@ -48,7 +48,7 @@ in
     userName = "sedengel";
     userEmail = "sbstdngl@yahoo.com";
     extraConfig = {
-      safe.directory = [ "/home/sebi/mnt/horse/gnn-tap" ];
+      safe.directory = [ "/home/sebi/mnt/horse-home/gnn-tap" ];
       init.defaultBranch = "main";
     };
   };
