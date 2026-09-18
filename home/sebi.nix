@@ -47,7 +47,10 @@ in
     enable = true;
     userName = "sedengel";
     userEmail = "sbstdngl@yahoo.com";
-    extraConfig.init.defaultBranch = "main";
+    extraConfig = {
+      safe.directory = [ "/home/sebi/mnt/horse/gnn-tap" ];
+      init.defaultBranch = "main";
+    };
   };
 
   # --- Bash ---
@@ -56,6 +59,10 @@ in
     shellAliases = {
       ls = "ls --color=auto";
       grep = "grep --color=auto";
+      mount-hpc = "sshfs 1.barnard:/home/h5/sede829c ~/mnt/hpc-home -o reconnect,auto_cache,ServerAliveInterval=15,ServerAliveCountMax=3";
+      umount-hpc = "fusermount -uz ~/mnt/hpc-home";
+      mount-bda = "sshfs sede829c@dgw.zih.tu-dresden.de:/svm/vs-grp105/bda_store ~/mnt/bda_store -o reconnect,auto_cache,ServerAliveInterval=15,ServerAliveCountMax=3";
+      umount-bda = "fusermount -uz ~/mnt/bda_store";
     };
     # Prompt wie auf Arch gewohnt.
     initExtra = ''
@@ -73,13 +80,13 @@ in
   # --- SSH client (TU Dresden HPC Login-Nodes) ---
   programs.ssh = {
     enable = true;
-    # Lädt den privaten Schlüssel beim ersten Gebrauch in den Agent, damit
-    # er via forwardAgent auf die HPC-Nodes weitergereicht wird.
     addKeysToAgent = "yes";
     matchBlocks."?.alpha ?.barnard ?.romeo ?.capella" = {
       hostname = "login%h.hpc.tu-dresden.de";
       user = "sede829c";
       forwardAgent = true;
+      serverAliveInterval = 30;
+      serverAliveCountMax = 5;
     };
   };
 
