@@ -59,8 +59,8 @@ in
     shellAliases = {
       ls = "ls --color=auto";
       grep = "grep --color=auto";
-      mount-hpc = "sshfs 1.barnard:/home/h5/sede829c ~/mnt/hpc-home -o reconnect,auto_cache,ServerAliveInterval=15,ServerAliveCountMax=3";
-      umount-hpc = "fusermount -uz ~/mnt/hpc-home";
+      mount-hpc = "sshfs 1.barnard:/home/h5/sede829c ~/mnt/horse-home -o reconnect,auto_cache,ServerAliveInterval=15,ServerAliveCountMax=3";
+      umount-hpc = "fusermount -uz ~/mnt/horse-home";
       mount-bda = "sshfs sede829c@dgw.zih.tu-dresden.de:/svm/vs-grp105/bda_store ~/mnt/bda_store -o reconnect,auto_cache,ServerAliveInterval=15,ServerAliveCountMax=3";
       umount-bda = "fusermount -uz ~/mnt/bda_store";
     };
