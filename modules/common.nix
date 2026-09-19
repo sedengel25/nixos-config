@@ -73,6 +73,9 @@
     # VM
     qemu
 
+
+    # Partitioning
+    parted
     # Mount
     cifs-utils  # mount Windows/SMB network shares
 
