@@ -40,6 +40,8 @@
 
   # --- CLI tools ---
   environment.systemPackages = with pkgs; [
+    # Nix
+    nix-index
     # Version control / editor
     git
     vim
