@@ -50,6 +50,7 @@
 
     # Network / download
     wget
+    nmap
 
     # File & search utilities
     file      # detects file type by content
