@@ -3,8 +3,8 @@
 
 {
   users.users.sebi = {
-    isNormalUser = true;
-    extraGroups = [ "wheel" "networkmanager" "video" "audio" ];
-    shell = pkgs.bash;
+    isNormalUser = true; # creates the user
+    extraGroups = [ "wheel" "networkmanager" "video" "audio" ]; # grants privileges (wheel grants sudo)
+    shell = pkgs.bash; # what the user gets dropped into after logging in
   };
 }
