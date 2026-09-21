@@ -12,7 +12,7 @@ the user-level setup. One repo, one `nixpkgs` pin, four hosts.
 | `desktop` | `nixos-desktop` | Desktop with NVIDIA GPU (RTX 4070 SUPER) + Steam | `home/sebi.nix` |
 | `server` | `server` | Headless, SSH key only, Tailscale + Syncthing | `home/server.nix` |
 
-## Idee: ein Datenbestand, drei Arbeitsplätze
+## One file server, three workplaces
 
 `server` is the always-on central node and holds the data. `desktop`, `x1` and
 `l14` are interchangeable workplaces — I use whichever one I am sitting at and
