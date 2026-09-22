@@ -75,12 +75,24 @@ in
       settings = {
         add_newline = false;
         command_timeout = 2000;
-        format = "$username@$hostname $directory$git_branch$git_status$character";
+        format = "$username@$hostname $directory$git_branch$git_status\${custom.venv}$character";
         character = {
           success_symbol = "[\\$](bold green)";
           error_symbol = "[\\$](bold red)";
         };
         directory.truncation_length = 1;
+
+        # Aktives venv anzeigen. Starship setzt VIRTUAL_ENV_DISABLE_PROMPT=1,
+        # d.h. das `(venv)`-Praefix der activate-Skripte faellt weg. Das
+        # `python`-Modul greift nur in Python-Verzeichnissen, deshalb hier ein
+        # eigenes Modul, das rein an $VIRTUAL_ENV haengt. Heisst das Verzeichnis
+        # `.venv` (uv-Default), wird der Projektname statt ".venv" gezeigt.
+        custom.venv = {
+          when = ''[ -n "$VIRTUAL_ENV" ]'';
+          command = ''n=$(basename "$VIRTUAL_ENV"); [ "$n" = ".venv" ] && n=$(basename "$(dirname "$VIRTUAL_ENV")"); printf %s "$n"'';
+          format = "[\\($output\\)]($style) ";
+          style = "bold yellow";
+        };
       };
     };
 
