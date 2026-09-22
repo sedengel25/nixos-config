@@ -128,6 +128,7 @@ in
     nautilus      # Dateimanager
     seahorse      # GNOME-Schlüsselbund-GUI (Passwörter/SSH/GPG verwalten)
     dbeaver-bin   # Datenbank-GUI
+    duckdb
     claude-code   # Anthropic CLI Coding-Agent (unfree)
 
     # --- RStudio mit R-Paketen (Data-Science IDE) ---
