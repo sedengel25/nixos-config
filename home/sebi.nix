@@ -64,11 +64,25 @@ in
       mount-bda = "sshfs sede829c@dgw.zih.tu-dresden.de:/svm/vs-grp105/bda_store ~/mnt/bda_store -o reconnect,auto_cache,ServerAliveInterval=15,ServerAliveCountMax=3";
       umount-bda = "fusermount -uz ~/mnt/bda_store";
     };
-    # Prompt wie auf Arch gewohnt.
     initExtra = ''
-      PS1='[\u@\h \W]\$ '
+      eval "$(dircolors)"
+      export LS_COLORS="$LS_COLORS:mh=00"
     '';
   };
+
+  programs.starship = {
+      enable = true;
+      settings = {
+        add_newline = false;
+        format = "$username@$hostname $directory$git_branch$git_status$character";
+        character = {
+          success_symbol = "[\\$](bold green)";
+          error_symbol = "[\\$](bold red)";
+        };
+        directory.truncation_length = 1;
+      };
+    };
+
 
   # ~/.local/bin auf den PATH (ersetzt das manuelle `export PATH` aus .bashrc).
   home.sessionPath = [ "$HOME/.local/bin" ];

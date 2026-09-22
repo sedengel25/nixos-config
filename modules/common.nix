@@ -81,6 +81,7 @@
     parted
     # Mount
     cifs-utils  # mount Windows/SMB network shares
+    ntfs3g
 
     # Geo
     gdal      # read/write/convert geospatial data (raster/vector)
