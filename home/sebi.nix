@@ -74,6 +74,7 @@ in
       enable = true;
       settings = {
         add_newline = false;
+        command_timeout = 2000;
         format = "$username@$hostname $directory$git_branch$git_status$character";
         character = {
           success_symbol = "[\\$](bold green)";
