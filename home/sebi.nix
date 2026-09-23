@@ -65,7 +65,6 @@ in
       umount-bda = "fusermount -uz ~/mnt/bda_store";
     };
     initExtra = ''
-      set -o vi
       eval "$(dircolors)"
       export LS_COLORS="$LS_COLORS:mh=00"
     '';
