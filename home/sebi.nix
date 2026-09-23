@@ -96,6 +96,10 @@ in
       };
     };
 
+  programs.fzf = {
+    enable = true;
+    enableBashIntegration = true;   # or enableZshIntegration = true
+  };
 
   # ~/.local/bin auf den PATH (ersetzt das manuelle `export PATH` aus .bashrc).
   home.sessionPath = [ "$HOME/.local/bin" ];
