@@ -26,6 +26,7 @@ let
     (leaflet_extras.overrideAttrs (o: { meta = o.meta // { broken = false; }; }))
     future
     future_apply
+    duckdb
   ];
 in
 {
