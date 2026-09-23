@@ -52,23 +52,6 @@ in
       ];
     })
 
-    #(pkgs.makeDesktopItem {
-    #  name = "mywhoosh";
-    #  desktopName = "MyWhoosh";
-    #  comment = "Indoor cycling, via Lutris/Wine";
-    #  # rungame/<slug> statt rungameid/<n>: der Slug steht im Installer, die
-    #  # numerische ID vergibt Lutris erst beim Installieren -- nur die
-    #  # Slug-Variante ueberlebt eine Neuinstallation der Maschine.
-    #  # LUTRIS_SKIP_INIT wie im Lutris-eigenen Shortcut: startet das Spiel,
-    #  # ohne vorher nach Runtime-Updates zu sehen.
-    #  exec = "env LUTRIS_SKIP_INIT=1 lutris lutris:rungame/mywhoosh";
-    #  tryExec = "lutris";
-    #  # Muss net.lutris.Lutris heissen -- so heisst das Icon, das wirklich
-    #  # unter share/icons/hicolor/*/apps/ liegt. "lutris" waere leer.
-    #  icon = "net.lutris.Lutris";
-    #  categories = [ "Game" ];
-    #  terminal = false;
-    #})
 
     # umu auch ausserhalb von Lutris, direkt auf der Kommandozeile -- dort ist
     # der FHS-Wrapper genau richtig.
