@@ -1,5 +1,5 @@
 # home-manager: sebi's user-level apps and dotfiles.
-{ pkgs, ... }:
+{ pkgs, osConfig, ... }:
 
 let
   # Gemeinsame R-Paketliste. Wird von RStudio (IDE) UND der Terminal-R
@@ -28,6 +28,50 @@ let
     future_apply
     duckdb
   ];
+
+  # --- Monitoring-Workspace (i3 $ws7) ---
+
+  # Die TUIs des Dashboards. Wird ZWEIMAL gebraucht: in home.packages, damit
+  # die Tools auch normal auf der Shell liegen, und als runtimeInputs des
+  # `monitoring`-Launchers, damit der nicht auf ein zufaellig passendes $PATH
+  # angewiesen ist.
+  #
+  # nvtop: bewusst die `full`-Variante. Sie bringt die Backends fuer NVIDIA,
+  # AMD und Intel mit, und dieselbe home-config laeuft auf desktop (NVIDIA),
+  # l14 (AMD) und x1 (Intel) -- so bleibt der GPU-Pane host-unabhaengig.
+  #
+  # btop: die schlichte Variante. GPU-Support gibt es in nixpkgs nur als
+  # btop-cuda bzw. btop-rocm, also ein ANDERES Derivat je nach Karte. Das
+  # vertraegt sich nicht mit einem gemeinsamen home-Profil fuer alle drei
+  # Hosts -- und es ist unnoetig, weil nvtop die GPU ohnehin abdeckt.
+  #
+  # Zur Beruhigung: nvtop-full zieht CUDA nur zur BAUZEIT an (fuer das
+  # NVIDIA-Backend). Der Runtime-Closure ist ~55 MiB und enthaelt kein CUDA,
+  # die Laptops schleppen also nichts Unnoetiges mit.
+  #
+  # iotop und bandwhich fehlen hier ABSICHTLICH: die kommen als setcap-Wrapper
+  # aus modules/monitoring.nix und werden im Launcher ueber /run/wrappers/bin
+  # aufgerufen. Staenden sie hier, wuerden sie den Wrapper im PATH verdecken
+  # und liefen wieder nur mit sudo.
+  monitoringTools = with pkgs; [
+    btop
+    nvtopPackages.full
+    s-tui
+  ];
+
+  # Sensor-Pfad fuer i3status (cpu_temperature). i3status' Default waere
+  # thermal_zone0 -- das ist auf dem Desktop aber der WLAN-Chip (iwlwifi), nicht
+  # die CPU. i3status erlaubt Globs im `path` und nimmt den ersten Treffer;
+  # hwmon* faengt die ueber Reboots nicht stabile hwmon-Nummerierung ab.
+  #
+  # `osConfig` ist die NixOS-Config des Hosts. Sichtbar, weil home-manager hier
+  # als NixOS-Modul laeuft (siehe flake.nix). updateMicrocode wird von
+  # nixos-generate-config aus dem erkannten CPU-Hersteller gesetzt und ist
+  # damit ein verlaesslicher Indikator.
+  cpuTempPath =
+    if osConfig.hardware.cpu.amd.updateMicrocode
+    then "/sys/bus/pci/drivers/k10temp/*/hwmon/hwmon*/temp1_input"    # Tctl (l14, desktop)
+    else "/sys/devices/platform/coretemp.0/hwmon/hwmon*/temp1_input"; # Package id 0 (x1)
 in
 {
   home.username = "sebi";
@@ -169,6 +213,42 @@ in
     xournalpp           # Hand-signature
     pdfarranger         # PDFs zusammenfügen etc.
 
+    # --- Monitoring-Workspace ---
+    # Baut den Workspace als Grid auf, oder wechselt nur hin, wenn es ihn
+    # schon gibt. Gebunden an $mod+m in dotfiles/i3/config.
+    (writeShellApplication {
+      name = "monitoring";
+      runtimeInputs = [ i3 jq alacritty ] ++ monitoringTools;
+      text = ''
+        WS="''${1:-Monitoring}"
+
+        # Schon gebaut? Dann nur hinwechseln, statt die Panes zu verdoppeln.
+        if i3-msg -t get_workspaces | jq -e --arg ws "$WS" 'any(.name == $ws)' >/dev/null; then
+          i3-msg "workspace $WS"
+          exit 0
+        fi
+
+        # Erst das Geruest, dann die Fenster: append_layout legt pro Blatt ein
+        # Platzhalter-Fenster an, das das passende Terminal spaeter verschluckt.
+        # Ohne diesen Umweg wuerden aus den fuenf Terminals wegen des globalen
+        # `workspace_layout tabbed` fuenf Tabs statt eines Grids.
+        i3-msg "workspace $WS"
+        i3-msg "append_layout $HOME/.config/i3/monitoring-layout.json"
+
+        # --class setzt WM_CLASS und entscheidet damit, in welches Pane das
+        # Fenster faellt (siehe monitoring-layout.json). --hold laesst das
+        # Fenster mitsamt Fehlermeldung stehen, falls ein Tool sofort abbricht.
+        #
+        # iotop und bandwhich BEWUSST ueber den absoluten Wrapper-Pfad: nur der
+        # traegt die Capabilities aus modules/monitoring.nix.
+        alacritty --class mon_btop      --hold -e btop &
+        alacritty --class mon_nvtop     --hold -e nvtop &
+        alacritty --class mon_iotop     --hold -e /run/wrappers/bin/iotop &
+        alacritty --class mon_bandwhich --hold -e /run/wrappers/bin/bandwhich &
+        alacritty --class mon_sensors   --hold -e s-tui &
+      '';
+    })
+
     # TOTP-Generator: `2fa <service>` liest den Base32-Seed aus
     # ~/.2fa_secrets (Zeilen "service=SEED"), erzeugt den 6-stelligen Code,
     # kopiert ihn in die Zwischenablage und gibt ihn aus. Der Seed selbst
@@ -192,13 +272,22 @@ in
         echo "$CODE (in Zwischenablage kopiert)"
       '';
     })
-  ];
+  ] ++ monitoringTools;
 
   # --- Dotfiles ---
   # i3-Config bleibt vorerst eine einfache Datei, per HM verlinkt nach
   # ~/.config/i3/config. Später kann sie voll deklarativ werden (xsession.windowManager.i3).
   xdg.configFile."i3/config".source = ../dotfiles/i3/config;
   xdg.configFile."alacritty/alacritty.toml".source = ../dotfiles/alacritty/alacritty.toml;
+
+  # Grid-Geruest fuer den Monitoring-Workspace (siehe `monitoring` oben).
+  xdg.configFile."i3/monitoring-layout.json".source = ../dotfiles/i3/monitoring-layout.json;
+
+  # i3status: nicht .source, sondern .text -- der Sensor-Pfad haengt am Host,
+  # deshalb wird @CPU_TEMP_PATH@ beim Bauen ersetzt (s. cpuTempPath oben).
+  xdg.configFile."i3status/config".text =
+    builtins.replaceStrings [ "@CPU_TEMP_PATH@" ] [ cpuTempPath ]
+      (builtins.readFile ../dotfiles/i3status/config);
 
   # RStudio-Preferences deklarativ. editor_keybindings = "vim" schaltet den
   # Vim-Modus im Code-Editor ein (Enum: default|vim|emacs|sublime). Die Datei

@@ -1,0 +1,66 @@
+// i3 append_layout-Baum fuer den Monitoring-Workspace.
+//
+// Wird von `monitoring` (writeShellApplication in home/sebi.nix) per
+// `i3-msg append_layout` in den leeren Workspace geschoben, BEVOR die
+// Terminals starten. i3 legt pro Blatt ein Platzhalter-Fenster an und
+// "verschluckt" (swallows) spaeter das Fenster, dessen WM_CLASS passt.
+//
+// Zwei Gruende fuer diesen Umweg statt fuenf simpler exec-Zeilen:
+//   1. `workspace_layout tabbed` steht global in der i3-config -- ohne
+//      vorgegebenen Baum wuerden die fuenf Terminals zu fuenf Tabs statt
+//      zu einem Grid.
+//   2. Die Zuordnung Tool -> Pane ist damit deterministisch und haengt
+//      nicht am Startzeitpunkt der einzelnen Programme.
+//
+// Die class-Regexe sind mit ^...$ verankert. i3 matcht `class` sonst als
+// Teilstring -- genau die Falle, in die `assign [class="Alacritty"]` lief.
+// Bleibt ein leeres Platzhalter-Fenster stehen, passt ein Regex nicht:
+// mit `xprop WM_CLASS` die echte Klasse pruefen.
+//
+// JSON mit Kommentaren ist hier erlaubt: i3 parst die Datei mit yajl im
+// comment-toleranten Modus (so schreibt auch `i3-save-tree` seine Ausgabe).
+{
+    "layout": "splitv",
+    "type": "con",
+    "nodes": [
+        {
+            "layout": "splith",
+            "percent": 0.6,
+            "type": "con",
+            "nodes": [
+                {
+                    "type": "con",
+                    "percent": 0.5,
+                    "swallows": [ { "class": "^mon_btop$" } ]
+                },
+                {
+                    "type": "con",
+                    "percent": 0.5,
+                    "swallows": [ { "class": "^mon_nvtop$" } ]
+                }
+            ]
+        },
+        {
+            "layout": "splith",
+            "percent": 0.4,
+            "type": "con",
+            "nodes": [
+                {
+                    "type": "con",
+                    "percent": 0.34,
+                    "swallows": [ { "class": "^mon_iotop$" } ]
+                },
+                {
+                    "type": "con",
+                    "percent": 0.33,
+                    "swallows": [ { "class": "^mon_bandwhich$" } ]
+                },
+                {
+                    "type": "con",
+                    "percent": 0.33,
+                    "swallows": [ { "class": "^mon_sensors$" } ]
+                }
+            ]
+        }
+    ]
+}

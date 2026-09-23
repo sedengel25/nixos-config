@@ -42,7 +42,7 @@ modules/           shared system modules, toggled per host by importing them
 users/sebi.nix     system-level account (groups, shell)
 home/sebi.nix      home-manager profile: GUI apps, dotfiles, R/Python env
 home/server.nix    home-manager profile for headless hosts (no GUI)
-dotfiles/          plain config files (i3, alacritty, vim, rstudio) read by home/
+dotfiles/          plain config files (i3, i3status, alacritty, vim, rstudio) read by home/
 ```
 
 ### modules/
@@ -58,6 +58,7 @@ dotfiles/          plain config files (i3, alacritty, vim, rstudio) read by home
 | `eduvpn.nix` | eduVPN client + the NetworkManager OpenVPN plugin |
 | `tailscale.nix` | Tailscale, `tailscale0` trusted in the firewall |
 | `syncthing.nix` | Syncthing as user `sebi` |
+| `monitoring.nix` | setcap wrappers for `iotop`/`bandwhich` + `lm_sensors`, for the i3 Monitoring workspace |
 
 ## Usage
 

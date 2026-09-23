@@ -13,6 +13,7 @@
     ../../modules/eduvpn.nix   
     ../../modules/tailscale.nix
     ../../modules/syncthing.nix
+    ../../modules/monitoring.nix
 
     # System-level user account.
     ../../users/sebi.nix

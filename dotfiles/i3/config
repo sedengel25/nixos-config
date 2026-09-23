@@ -61,6 +61,12 @@ bindsym $mod+Return exec alacritty
 # TUD 2FA-Code erzeugen und in die Zwischenablage kopieren
 bindsym $mod+t exec --no-startup-id 2fa tud
 
+# Monitoring-Workspace bauen bzw. dorthin wechseln (btop, nvtop, iotop,
+# bandwhich, s-tui als Grid). Bewusst KEIN exec beim Login: die Tools pollen
+# dauerhaft und kosten auf x1/l14 Akku. Der Workspace-Name wird als Argument
+# uebergeben, damit er nur hier steht -- i3 expandiert $ws7 vor dem exec.
+bindsym $mod+m exec --no-startup-id monitoring "$ws7"
+
 # kill focused window
 bindsym $mod+KP_0 kill
 bindsym $mod+KP_Insert kill
@@ -137,13 +143,13 @@ set $ws3 "Communication"
 set $ws4 "Data Analysis"
 set $ws5 "File Explorer"
 set $ws6 "Database"
-set $ws7 "7"
+set $ws7 "Monitoring"
 set $ws8 "8"
 set $ws9 "9"
 set $ws10 "10"
 
 assign [class="(?i)firefox"] $ws1
-assign [class="Alacritty"] $ws2
+assign [class="^Alacritty$"] $ws2
 assign [class="Evolution|org\.gnome\.Evolution"] $ws3
 assign [class="(?i)rstudio"] $ws4
 assign [class="(?i)nautilus|org\.gnome\.Nautilus"] $ws5

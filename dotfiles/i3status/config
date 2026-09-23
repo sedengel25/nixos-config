@@ -1,0 +1,100 @@
+# i3status -- Inhalt der i3bar-Statuszeile.
+#
+# Vorher gab es diese Datei NICHT, d.h. i3status lief mit seinen eingebauten
+# Defaults (ipv6, disk, net, load, battery, Uhr) -- ohne CPU, RAM und Temperatur.
+#
+# ACHTUNG: Diese Datei wird nicht direkt verlinkt. home/sebi.nix liest sie ein
+# und ersetzt @CPU_TEMP_PATH@ durch den zum Host passenden Sensor-Pfad (Intel
+# coretemp vs. AMD k10temp). Der Platzhalter MUSS also stehen bleiben.
+#
+# Warum ueberhaupt ein Pfad: der Default waere thermal_zone0 -- und das ist auf
+# dem Desktop der WLAN-Chip (iwlwifi), nicht die CPU. i3status kann Globs im
+# `path` (nimmt den ersten Treffer), deshalb faengt hwmon* die nicht stabile
+# hwmon-Nummerierung ab.
+
+general {
+        colors = true
+        interval = 5
+        color_good     = "#88cc88"
+        color_degraded = "#ddbb55"
+        color_bad      = "#dd5555"
+}
+
+order += "cpu_usage"
+order += "load"
+order += "cpu_temperature 0"
+order += "memory"
+order += "disk /"
+order += "wireless _first_"
+order += "ethernet _first_"
+order += "battery all"
+order += "volume master"
+order += "tztime local"
+
+cpu_usage {
+        format = "CPU %usage"
+        max_threshold = 90
+}
+
+load {
+        format = "load %1min"
+}
+
+cpu_temperature 0 {
+        format = "%degrees °C"
+        path = "@CPU_TEMP_PATH@"
+        max_threshold = 85
+}
+
+memory {
+        format = "RAM %used/%total"
+        format_degraded = "RAM KNAPP %available"
+        threshold_degraded = "10%"
+        threshold_critical = "5%"
+}
+
+disk "/" {
+        format = "/ %avail"
+        low_threshold = 10
+        threshold_type = percentage_avail
+}
+
+# format_down = "" -> auf Hosts ohne das jeweilige Interface bleibt der Block leer,
+# statt ein stoerendes "down" anzuzeigen (Desktop hat WLAN + LAN, Laptops meist nur WLAN).
+wireless _first_ {
+        format_up = "W %essid %quality"
+        format_down = ""
+}
+
+ethernet _first_ {
+        format_up = "E %ip"
+        format_down = ""
+}
+
+# "all" ersetzt %d im Pfad durch * und globt /sys/class/power_supply/BAT*.
+# Die Logitech-Funkgeraete heissen hidpp_battery_N und werden dadurch NICHT
+# mitgezaehlt. Findet der Glob nichts (Desktop), gibt i3status format_down aus
+# -- deshalb "", damit der Block dort einfach leer bleibt. Ein Host-Schalter
+# ist also nicht noetig.
+battery all {
+        format = "%status %percentage %remaining"
+        format_down = ""
+        last_full_capacity = true
+        integer_battery_capacity = true
+        low_threshold = 15
+        threshold_type = percentage
+}
+
+# device = "pulse": i3status ist mit libpulseaudio gebaut und redet ueber
+# pipewire-pulse mit PipeWire. Damit aktualisiert sich der Block von selbst;
+# das `killall -SIGUSR1 i3status` aus den XF86Audio-Bindings in der i3-config
+# bleibt trotzdem gueltig und schadet nicht.
+volume master {
+        format = "VOL %volume"
+        format_muted = "VOL stumm"
+        device = "pulse"
+}
+
+tztime local {
+        format = "%Y-%m-%d %H:%M:%S"
+}
