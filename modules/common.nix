@@ -86,5 +86,8 @@
     # Geo
     gdal      # read/write/convert geospatial data (raster/vector)
     gpsbabel  # convert between GPS data formats
+
+    # Presentations
+    quarto
   ];
 }
