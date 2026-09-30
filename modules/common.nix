@@ -89,5 +89,6 @@
 
     # Presentations
     quarto
+    texliveMedium
   ];
 }
