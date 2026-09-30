@@ -27,6 +27,7 @@ let
     future
     future_apply
     duckdb
+    igraph
   ];
 
   # --- Monitoring-Workspace (i3 $ws7) ---
