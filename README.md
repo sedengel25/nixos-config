@@ -35,7 +35,7 @@ pairing devices/folders in Syncthing is per-machine state outside this repo —
 ## Layout
 
 ```
-flake.nix          inputs (nixpkgs 26.05, home-manager) + mkHost helper
+flake.nix          inputs (nixpkgs 26.05, nixpkgs 25.11 fuer quarto, home-manager) + mkHost helper
 hosts/<name>/      per-host: imports, hostname, bootloader, stateVersion
   hardware-configuration.nix
 modules/           shared system modules, toggled per host by importing them

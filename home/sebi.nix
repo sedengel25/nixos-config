@@ -9,6 +9,7 @@ let
   # (data.table -> data_table).
   rEnvPackages = with pkgs.rPackages; [
     languageserver   # R Language Server (Autocomplete/Diagnostics)
+    rmarkdown        # knitr-Engine fuer quarto/.qmd (zieht knitr mit)
     tidyverse
     here
     sf

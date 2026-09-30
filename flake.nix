@@ -4,6 +4,13 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-26.05";
 
+    # Zweite nixpkgs-Quelle, ausschliesslich fuer einzeln zurueckgepinnte Pakete.
+    # Aktuell nur quarto: 26.05 liefert quarto 1.9.37, das pandoc 3.8.3 erwartet,
+    # aber nur pandoc 3.7.0.2 dazu -> Renderfehler "Unknown option
+    # syntax-highlighting". 25.11 hat quarto 1.7.34 mit passendem pandoc.
+    # Bewusst OHNE inputs.nixpkgs.follows - es muss ein eigener Baum bleiben.
+    nixpkgs-2511.url = "github:nixos/nixpkgs/nixos-25.11";
+
     home-manager = {
       url = "github:nix-community/home-manager/release-26.05";
       inputs.nixpkgs.follows = "nixpkgs";

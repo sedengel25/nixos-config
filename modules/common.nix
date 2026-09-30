@@ -1,5 +1,23 @@
 # Baseline every host imports
-{ pkgs, ... }:
+{ pkgs, inputs, ... }:
+
+let
+  # Einzelne Pakete aus 25.11 (siehe input `nixpkgs-2511` in flake.nix).
+  pkgs2511 = inputs.nixpkgs-2511.legacyPackages.${pkgs.stdenv.hostPlatform.system};
+
+  # quarto 1.7.34 statt 1.9.37 aus 26.05 (Begruendung am input).
+  # Wichtig: pandoc/deno/typst/dart-sass muessen aus DERSELBEN nixpkgs kommen,
+  # quarto verdrahtet sie fest im Wrapper -> nicht einzeln auf 26.05 ziehen.
+  #
+  # rWrapper/python3 = null: quarto baut sonst ein eigenes R (nur rmarkdown!)
+  # und ein eigenes Python dazu (906 MiB statt 118 MiB Download). Mit null
+  # nimmt quarto R und python vom PATH -> genau die Umgebung aus home/sebi.nix
+  # inkl. rEnvPackages, statt eines zweiten, fast leeren R.
+  quarto-pinned = pkgs2511.quarto.override {
+    rWrapper = null;
+    python3 = null;
+  };
+in
 
 {
   # Enable flakes + the new nix CLI (nix build, nix run, nix develop...)
@@ -8,6 +26,7 @@
   # Allow 'unfree' software (claude-code, positron, NVIDIA-Treiber …)
   # Unfree: licensed in a way that restricts use, redistribution or modification
   nixpkgs.config.allowUnfree = true;
+  nixpkgs.config.permittedInsecurePackages = [ "electron-41.10.7" ];
 
   # --- Networking ---
   # Enables NetworkManager, which:
@@ -88,7 +107,55 @@
     gpsbabel  # convert between GPS data formats
 
     # Presentations
-    quarto
-    texliveMedium
+    quarto-pinned
+    # texliveMedium + alles, was ~/bda-templates zusaetzlich braucht (ermittelt
+    # per kpsewhich ueber alle .tex/.sty/.cls der Templates). Kostet nur ~38 MiB;
+    # texliveFull waere 1.0 GiB. Fehlt spaeter ein Paket: `kpsewhich foo.sty`
+    # sagt es, dann hier den CTAN-Namen ergaenzen.
+    (texliveMedium.withPackages (ps: with ps; [
+      # TU-Dresden-Corporate-Design-Klassen (tudscrreprt/tudscrartcl)
+      tudscr
+      # Literaturverzeichnisse: texliveMedium bringt nur bibtex mit, die
+      # Templates wollen biblatex mit biber-Backend (student report: style=apa)
+      biblatex
+      biber
+      biblatex-apa
+      # Code-Listings aus pandoc/quarto (Shaded/Highlighting) bzw. minted
+      framed
+      fvextra
+      minted            # braucht pygmentize auf dem PATH (kommt mit jupyter)
+      # Schriften/Mathe des TUD-CD-Beamer-Themes
+      notomath
+      noto
+      mnsymbol
+      fontaxes          # transitive Abhaengigkeit von notomath
+      newtx             # liefert newtxmath.sty (von notomath geladen)
+      upquote           # gerade Quotes in Verbatim (pandoc-Listings)
+      # Beamer-Extras
+      appendixnumberbeamer
+      textpos
+      transparent
+      # Satz/Struktur
+      acronym
+      comment
+      csquotes
+      enumitem
+      isodate
+      pdfcomment
+      pgfplots
+      placeins
+      qrcode
+      relsize
+      scrhack
+      scrwfile
+      bigfoot           # liefert suffix.sty (Student-Report-Template)
+      mwe               # example-image-* Platzhalterbilder der Demo-Dokumente
+      tocloft
+      xurl
+      zref              # liefert auch zref-savepos.sty
+      # Blindtext fuer die Beispieldokumente
+      blindtext
+      lipsum
+    ]))
   ];
 }
