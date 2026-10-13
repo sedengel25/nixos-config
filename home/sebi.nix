@@ -14,9 +14,9 @@ let
     here
     sf
     data_table
-    plotly           # Interaktive Plots (zieht htmlwidgets als Dependency)
-    patchwork        # ggplot2-Plots nebeneinander/kombinieren
-    shiny            # Web-App-Framework für R
+    plotly           
+    patchwork       
+    shiny          
     DT
     dbscan
     leaflet
@@ -29,6 +29,7 @@ let
     future_apply
     duckdb
     igraph
+    stream
   ];
 
   # --- Monitoring-Workspace (i3 $ws7) ---
@@ -92,6 +93,7 @@ in
   # --- Git ---
   programs.git = {
     enable = true;
+    lfs.enable=true;
     userName = "sedengel";
     userEmail = "sbstdngl@yahoo.com";
     extraConfig = {

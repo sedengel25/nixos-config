@@ -92,8 +92,6 @@ in
     lshw      # detailed hardware listing
 
     rdfind # finds duplicated files
-    # VM
-    qemu
 
 
     # Partitioning
@@ -102,9 +100,8 @@ in
     cifs-utils  # mount Windows/SMB network shares
     ntfs3g
 
-    # Geo
-    gdal      # read/write/convert geospatial data (raster/vector)
-    gpsbabel  # convert between GPS data formats
+    # Compile
+    make
 
     # Presentations
     quarto-pinned
