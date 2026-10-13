@@ -101,7 +101,7 @@ in
     ntfs3g
 
     # Compile
-    make
+    gnumake
 
     # Presentations
     quarto-pinned
