@@ -72,6 +72,7 @@ in
     # Network / download
     wget
     nmap
+    samba
 
     # File & search utilities
     file      # detects file type by content
