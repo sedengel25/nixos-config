@@ -105,10 +105,6 @@ in
 
     # Presentations
     quarto-pinned
-    # texliveMedium + alles, was ~/bda-templates zusaetzlich braucht (ermittelt
-    # per kpsewhich ueber alle .tex/.sty/.cls der Templates). Kostet nur ~38 MiB;
-    # texliveFull waere 1.0 GiB. Fehlt spaeter ein Paket: `kpsewhich foo.sty`
-    # sagt es, dann hier den CTAN-Namen ergaenzen.
     (texliveMedium.withPackages (ps: with ps; [
       # TU-Dresden-Corporate-Design-Klassen (tudscrreprt/tudscrartcl)
       tudscr
@@ -133,6 +129,8 @@ in
       textpos
       transparent
       # Satz/Struktur
+      multirow
+      setspace
       acronym
       comment
       csquotes
