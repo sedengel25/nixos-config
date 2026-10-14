@@ -11,7 +11,6 @@
     ../../modules/audio.nix
     ../../modules/bluetooth.nix
     ../../modules/eduvpn.nix
-    ../../modules/eduroam.nix
     ../../modules/tailscale.nix
     ../../modules/syncthing.nix
     ../../modules/monitoring.nix
