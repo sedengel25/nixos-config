@@ -30,6 +30,7 @@ let
     duckdb
     igraph
     stream
+    ggdendro
   ];
 
   # --- Monitoring-Workspace (i3 $ws7) ---
