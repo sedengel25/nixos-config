@@ -33,6 +33,7 @@ let
     # DA-UL
     ggdendro
     palmerpenguins
+    cowplot
   ];
 
   # --- Monitoring-Workspace (i3 $ws7) ---
