@@ -23,6 +23,14 @@ in
   # Enable flakes + the new nix CLI (nix build, nix run, nix develop...)
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
+  # Build-Parallelitaet begrenzen. nix-Default ist max-jobs=auto (hier 8) und
+  # cores=0 (alle Kerne pro Job) -> bis zu 64 Compiler-Prozesse gleichzeitig.
+  # Das sprengt 16 GB RAM, sobald mehrere grosse C++-Builds parallel laufen:
+  # rstudio, r-duckdb, r-s2 & Co. liegen NICHT im Binary-Cache und werden
+  # lokal kompiliert (am 07.10. und 16.10.2026 hat das den OOM-Killer geweckt).
+  nix.settings.max-jobs = 1;
+  nix.settings.cores = 4;
+
   # Allow 'unfree' software (claude-code, positron, NVIDIA-Treiber …)
   # Unfree: licensed in a way that restricts use, redistribution or modification
   nixpkgs.config.allowUnfree = true;
