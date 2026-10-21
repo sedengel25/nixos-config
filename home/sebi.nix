@@ -30,7 +30,9 @@ let
     duckdb
     igraph
     stream
+    # DA-UL
     ggdendro
+    palmerpenguins
   ];
 
   # --- Monitoring-Workspace (i3 $ws7) ---
