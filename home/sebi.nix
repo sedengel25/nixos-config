@@ -29,11 +29,12 @@ let
     future_apply
     duckdb
     igraph
-    stream
     # DA-UL
     ggdendro
     palmerpenguins
     cowplot
+    stream
+    mclust
   ];
 
   # --- Monitoring-Workspace (i3 $ws7) ---
