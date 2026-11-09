@@ -30,6 +30,7 @@
     shellAliases = {
       ls = "ls --color=auto";
       grep = "grep --color=auto";
+      st="syncthing cli --home ~/.config/syncthing";
     };
     initExtra = ''
       PS1='[\u@\h \W]\$ '
