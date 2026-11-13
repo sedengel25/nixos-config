@@ -11,6 +11,12 @@
     # Bewusst OHNE inputs.nixpkgs.follows - es muss ein eigener Baum bleiben.
     nixpkgs-2511.url = "github:nixos/nixpkgs/nixos-25.11";
 
+    # Dritte nixpkgs-Quelle, nur fuer claude-code: das Paket bekommt mehrmals
+    # pro Woche eine neue Version, die in nixos-26.05 nicht nachgepflegt wird
+    # (26.05 steht auf 2.1.223, unstable auf 2.1.322). Bewusst OHNE
+    # inputs.nixpkgs.follows - es muss ein eigener Baum bleiben.
+    nixpkgs-unstable.url = "github:nixos/nixpkgs/nixpkgs-unstable";
+
     home-manager = {
       url = "github:nix-community/home-manager/release-26.05";
       inputs.nixpkgs.follows = "nixpkgs";

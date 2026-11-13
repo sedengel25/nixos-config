@@ -1,7 +1,16 @@
 # home-manager: sebi's user-level apps and dotfiles.
-{ pkgs, osConfig, ... }:
+{ pkgs, osConfig, inputs, ... }:
 
 let
+  # claude-code aus unstable (siehe input `nixpkgs-unstable` in flake.nix).
+  # import statt legacyPackages: claude-code ist unfree, und das allowUnfree
+  # aus modules/common.nix gilt nur fuer den Haupt-pkgs-Baum, nicht fuer einen
+  # zweiten, hier selbst gebauten.
+  pkgsUnstable = import inputs.nixpkgs-unstable {
+    inherit (pkgs.stdenv.hostPlatform) system;
+    config.allowUnfree = true;
+  };
+
   # Gemeinsame R-Paketliste. Wird von RStudio (IDE) UND der Terminal-R
   # geteilt, damit beide exakt denselben Satz Pakete sehen. Neue Pakete
   # NUR hier eintragen (kein install.packages() zur Laufzeit), dann rebuild –
@@ -187,7 +196,7 @@ in
     seahorse      # GNOME-Schlüsselbund-GUI (Passwörter/SSH/GPG verwalten)
     dbeaver-bin   # Datenbank-GUI
     duckdb
-    claude-code   # Anthropic CLI Coding-Agent (unfree)
+    pkgsUnstable.claude-code   # Anthropic CLI Coding-Agent (unfree, aus unstable)
 
     # --- RStudio mit R-Paketen (Data-Science IDE) ---
     # rstudioWrapper bündelt R + die Pakete aus rEnvPackages fest ein; die

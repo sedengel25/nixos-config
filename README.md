@@ -35,7 +35,7 @@ pairing devices/folders in Syncthing is per-machine state outside this repo —
 ## Layout
 
 ```
-flake.nix          inputs (nixpkgs 26.05, nixpkgs 25.11 fuer quarto, home-manager) + mkHost helper
+flake.nix          inputs (nixpkgs 26.05, 25.11 fuer quarto, unstable fuer claude-code, home-manager) + mkHost helper
 hosts/<name>/      per-host: imports, hostname, bootloader, stateVersion
   hardware-configuration.nix
 modules/           shared system modules, toggled per host by importing them
@@ -71,4 +71,10 @@ nixos-rebuild build --flake .#desktop
 
 # Update all inputs
 nix flake update
+
+# Nur claude-code aktualisieren (Rest des Systems bleibt, wo er ist).
+# claude-code haengt am input `nixpkgs-unstable`, weil die stabile Branch
+# dem Release-Tempo des Pakets nicht hinterherkommt.
+nix flake update nixpkgs-unstable
+sudo nixos-rebuild switch --flake .#x1
 ```
