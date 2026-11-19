@@ -34,6 +34,7 @@ let
     giscoR
     renv
     reticulate
+    profvis
     # In aktuellem nixpkgs als "broken" markiert; Markierung ist oft veraltet
     # und das Paket baut trotzdem. markUnbroken hebt nur diese eine Markierung auf.
     (leaflet_extras.overrideAttrs (o: { meta = o.meta // { broken = false; }; }))
