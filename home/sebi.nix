@@ -29,6 +29,7 @@ let
     DT
     dbscan
     leaflet
+    osmdata
     giscoR
     renv
     reticulate
