@@ -29,6 +29,7 @@ let
     DT
     dbscan
     leaflet
+    maptiles
     osmdata
     giscoR
     renv
