@@ -38,6 +38,7 @@ let
     future
     future_apply
     duckdb
+    httr2
     igraph
     # DA-UL
     ggdendro
