@@ -31,6 +31,7 @@ let
     leaflet
     maptiles
     osmdata
+    osmextract
     giscoR
     renv
     reticulate
