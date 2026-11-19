@@ -29,6 +29,7 @@ let
     DT
     dbscan
     leaflet
+    giscoR
     renv
     reticulate
     # In aktuellem nixpkgs als "broken" markiert; Markierung ist oft veraltet
@@ -122,10 +123,10 @@ in
     shellAliases = {
       ls = "ls --color=auto";
       grep = "grep --color=auto";
-      mount-horse-home = "sshfs 1.barnard:/home/h5/sede829c ~/mnt/horse-home -o reconnect,auto_cache,ServerAliveInterval=15,ServerAliveCountMax=3";
-      umount-horse-home = "fusermount -uz ~/mnt/horse-home";
-      mount-bda = "sshfs sede829c@dgw.zih.tu-dresden.de:/svm/vs-grp105/bda_store ~/mnt/bda_store -o reconnect,auto_cache,ServerAliveInterval=15,ServerAliveCountMax=3";
-      umount-bda = "fusermount -uz ~/mnt/bda_store";
+      mount-horse-home = "sshfs 1.barnard:/home/h5/sede829c /mnt/horse-home -o reconnect,auto_cache,ServerAliveInterval=15,ServerAliveCountMax=3";
+      umount-horse-home = "fusermount -uz /mnt/horse-home";
+      mount-bda = "sshfs sede829c@dgw.zih.tu-dresden.de:/svm/vs-grp105/bda_store /mnt/bda_store -o reconnect,auto_cache,ServerAliveInterval=15,ServerAliveCountMax=3";
+      umount-bda = "fusermount -uz /mnt/bda_store";
     };
     initExtra = ''
       eval "$(dircolors)"
